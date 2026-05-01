@@ -1,0 +1,21 @@
+"" 
+# Node
+node_modules/
+dist/
+.env
+*.env
+
+# Angular
+client/dist/
+client/.angular/
+
+# Uploads
+server/uploads/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
