@@ -47,7 +47,7 @@
           <!-- Image Left -->
           <div class="w-28 sm:w-40 md:w-48 flex-shrink-0 bg-gray-800 relative overflow-hidden">
             <img *ngIf="p.image_url"
-                 [src]="'http://localhost:3000' + p.image_url"
+                 [src]="'https://inventory-management-system-a1um.onrender.com' + p.image_url"
                  [alt]="p.name"
                  class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-300">
             <div *ngIf="!p.image_url"
@@ -173,7 +173,7 @@
         <!-- Product image in modal -->
         <div class="w-12 h-12 rounded-lg bg-gray-800 border border-gray-700 overflow-hidden flex-shrink-0 flex items-center justify-center">
           <img *ngIf="selectedProduct?.image_url"
-               [src]="'http://localhost:3000' + selectedProduct?.image_url"
+               [src]="'https://inventory-management-system-a1um.onrender.com' + selectedProduct?.image_url"
                class="w-full h-full object-cover">
           <span *ngIf="!selectedProduct?.image_url" class="text-2xl">📦</span>
         </div>

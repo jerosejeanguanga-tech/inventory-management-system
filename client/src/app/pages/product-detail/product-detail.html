@@ -43,7 +43,7 @@
           <!-- Image Panel -->
           <div class="bg-gray-800 min-h-48 sm:min-h-64 md:min-h-80 flex items-center justify-center relative">
             <img *ngIf="product.image_url"
-                 [src]="'http://localhost:3000' + product.image_url"
+                 [src]="'https://inventory-management-system-a1um.onrender.com' + product.image_url"
                  class="w-full h-full object-cover absolute inset-0" alt="">
             <div *ngIf="!product.image_url"
                  class="flex flex-col items-center justify-center text-center p-8">

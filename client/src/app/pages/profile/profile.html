@@ -39,7 +39,7 @@
               <div class="w-full h-full rounded-xl bg-gray-700 border-4 border-gray-900 overflow-hidden flex items-center justify-center text-4xl sm:text-5xl">
                 <img *ngIf="previewUrl" [src]="previewUrl" class="w-full h-full object-cover" alt="">
                 <img *ngIf="!previewUrl && profile.profile_image"
-                     [src]="'http://localhost:3000' + profile.profile_image"
+                     [src]="'https://inventory-management-system-a1um.onrender.com' + profile.profile_image"
                      class="w-full h-full object-cover" alt="">
                 <span *ngIf="!previewUrl && !profile.profile_image">👤</span>
               </div>
