@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
@@ -44,6 +44,11 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/requests', requestRoutes);
 app.use('/api/users', userRoutes);
+
+// 404 Handler
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.status(404).json({ message: 'Route not found' });
+});
 
 // Error Handler
 app.use(errorHandler);
