@@ -10,7 +10,6 @@
 |---|---|
 | 🖥️ Frontend (Angular) | https://inventorytracksystem.netlify.app|
 | ⚙️ Backend API (Node.js) | https://inventory-management-system-a1um.onrender.com |
-| 📚 API Documentation | `[YOUR BACKEND URL]/api-docs` |
 
 
 ## 🛠️ Tech Stack
