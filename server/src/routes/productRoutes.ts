@@ -3,7 +3,7 @@ import {
   getAllProducts, getProductById, createProduct,
   updateProduct, deleteProduct, updateStock
 } from '../config/productController';
-import { verifyToken } from '../middleware/authMiddleware';
+import { authenticate as verifyToken } from '../middleware/authMiddleware';
 import { requireAdmin } from '../middleware/roleMiddleware';
 import { upload } from '../utils/upload';
 

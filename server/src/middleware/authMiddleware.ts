@@ -3,11 +3,6 @@ import jwt from 'jsonwebtoken';
 
 export interface AuthRequest extends Request {
   user?: any;
-  body: any;
-  query: any;
-  params: any;
-  file?: any;
-  files?: any;
 }
 
 export const authenticate = (req: AuthRequest, res: Response, next: NextFunction): void => {
@@ -27,6 +22,9 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
     res.status(403).json({ message: 'Invalid or expired token' });
   }
 };
+
+// alias so routes using verifyToken still work
+export const verifyToken = authenticate;
 
 export const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction): void => {
   if (req.user?.role !== 'admin') {

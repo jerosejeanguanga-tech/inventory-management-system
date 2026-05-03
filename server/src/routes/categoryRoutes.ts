@@ -3,7 +3,7 @@ import {
   getAllCategories, createCategory,
   updateCategory, deleteCategory
 } from '../controllers/categoryController';
-import { verifyToken } from '../middleware/authMiddleware';
+import { authenticate as verifyToken } from '../middleware/authMiddleware';
 import { requireAdmin } from '../middleware/roleMiddleware';
 
 const router = express.Router();

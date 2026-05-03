@@ -3,7 +3,7 @@ import {
   getProfile, updateProfile,
   getAllUsers, getDashboardStats
 } from '../controllers/userController';
-import { verifyToken } from '../middleware/authMiddleware';
+import { authenticate as verifyToken } from '../middleware/authMiddleware';
 import { requireAdmin } from '../middleware/roleMiddleware';
 import { upload } from '../utils/upload';
 
