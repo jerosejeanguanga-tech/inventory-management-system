@@ -4,11 +4,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const pool = mysql.createPool({
-  host: process.env['tramway.proxy.rlwy.net'],
-  user: process.env['root'],
-  password: process.env['IuNzyNYiVvSuIRPwHttIRXcKpsQvwvdo'],
-  database: process.env['railway'],
-  port: Number(process.env['53574']) || 3306,
+  host: process.env['DB_HOST'],
+  user: process.env['DB_USER'],
+  password: process.env['DB_PASSWORD'],
+  database: process.env['DB_NAME'],
+  port: Number(process.env['DB_PORT']) || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
