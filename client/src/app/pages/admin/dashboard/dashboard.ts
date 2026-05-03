@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +21,7 @@ export class DashboardComponent implements OnInit {
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.http.get('http://localhost:3000/api/users/dashboard').subscribe({
+    this.http.get(`${environment.apiUrl}/api/users/dashboard`).subscribe({
       next: (data: any) => {
         this.stats = data.stats;
         this.recentRequests = data.recentRequests;

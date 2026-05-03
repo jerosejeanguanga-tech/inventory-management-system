@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-manage-users',
@@ -30,7 +31,7 @@ export class ManageUsersComponent implements OnInit {
   load(): void {
     this.loading = true;
     this.cdr.markForCheck();
-    this.http.get<any[]>('http://localhost:3000/api/users').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/users`).subscribe({
       next: (d: any[]) => {
         this.users = [...d];
         this.loading = false;
