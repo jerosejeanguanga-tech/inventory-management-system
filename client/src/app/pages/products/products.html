@@ -1,0 +1,240 @@
+<div class="min-h-screen bg-gray-950 text-white">
+
+  <!-- Page Header -->
+  <div class="bg-gray-900 border-b border-gray-800 px-4 sm:px-6 py-5">
+    <div class="max-w-5xl mx-auto">
+      <h1 class="text-xl sm:text-2xl font-bold text-white">Products</h1>
+      <p class="text-gray-500 text-xs sm:text-sm mt-0.5">Browse available inventory items</p>
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+
+    <!-- Filters -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mb-6">
+      <div class="relative">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">🔍</span>
+        <input [(ngModel)]="search" (ngModelChange)="onSearch()"
+               placeholder="Search products..."
+               class="w-full pl-9 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-lg px-4 py-2.5 focus:outline-none focus:border-emerald-500 text-xs sm:text-sm">
+      </div>
+      <select [(ngModel)]="selectedCategory" (ngModelChange)="onSearch()"
+              class="bg-gray-900 border border-gray-700 text-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:border-emerald-500 text-xs sm:text-sm">
+        <option value="">All Categories</option>
+        <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+      </select>
+      <select [(ngModel)]="selectedStatus" (ngModelChange)="onSearch()"
+              class="bg-gray-900 border border-gray-700 text-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:border-emerald-500 text-xs sm:text-sm">
+        <option value="">All Status</option>
+        <option value="available">✅ Available</option>
+        <option value="low_stock">⚠️ Low Stock</option>
+        <option value="out_of_stock">❌ Out of Stock</option>
+      </select>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="text-center py-20 text-gray-500">
+      <div class="text-4xl animate-spin inline-block mb-3">⏳</div>
+      <p class="text-sm">Loading products...</p>
+    </div>
+
+    <!-- Product List -->
+    <div *ngIf="!loading && products.length > 0" class="space-y-3">
+      <div *ngFor="let p of products"
+           class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-emerald-500/30 transition group">
+        <div class="flex items-stretch">
+
+          <!-- Image Left -->
+          <div class="w-28 sm:w-40 md:w-48 flex-shrink-0 bg-gray-800 relative overflow-hidden">
+            <img *ngIf="p.image_url"
+                 [src]="'http://localhost:3000' + p.image_url"
+                 [alt]="p.name"
+                 class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-300">
+            <div *ngIf="!p.image_url"
+                 class="absolute inset-0 flex flex-col items-center justify-center text-center p-3">
+              <span class="text-4xl sm:text-5xl">📦</span>
+              <p class="text-gray-600 text-xs mt-1 hidden sm:block">No image</p>
+            </div>
+
+            <!-- Status Badge over image -->
+            <div class="absolute top-2 left-2">
+              <span [class]="'text-xs font-bold px-2 py-0.5 rounded-full ' + getStatusColor(p.status)">
+                {{ p.status === 'available' ? '✅' : p.status === 'low_stock' ? '⚠️' : '❌' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Content Right -->
+          <div class="flex-1 min-w-0 p-4 sm:p-5 flex flex-col justify-between">
+            <div>
+              <!-- Category + Name -->
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="min-w-0 flex-1">
+                  <span class="inline-block text-xs text-gray-500 bg-gray-800 border border-gray-700 px-2 py-0.5 rounded-full mb-1.5">
+                    📁 {{ p.category_name || 'Uncategorized' }}
+                  </span>
+                  <h3 class="text-white font-bold text-sm sm:text-base leading-tight truncate group-hover:text-emerald-400 transition">
+                    {{ p.name }}
+                  </h3>
+                </div>
+                <!-- Status label desktop -->
+                <span [class]="'hidden sm:inline text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0 ' + getStatusColor(p.status)">
+                  {{ p.status === 'available' ? 'Available' : p.status === 'low_stock' ? 'Low Stock' : 'Out of Stock' }}
+                </span>
+              </div>
+
+              <!-- Description -->
+              <p class="text-gray-500 text-xs sm:text-sm line-clamp-2 leading-relaxed mb-3">
+                {{ p.description || 'No description available.' }}
+              </p>
+            </div>
+
+            <!-- Bottom Row: Stock + Price + Button -->
+            <div class="flex items-center justify-between gap-3 flex-wrap">
+              <!-- Stock + Price -->
+              <div class="flex items-center gap-3 sm:gap-4">
+                <div>
+                  <p class="text-gray-500 text-xs mb-0.5">Stock</p>
+                  <p class="text-white font-bold text-sm">
+                    {{ p.quantity }}
+                    <span class="text-gray-500 font-normal text-xs">{{ p.unit }}</span>
+                  </p>
+                </div>
+                <div class="w-px h-8 bg-gray-700"></div>
+                <div>
+                  <p class="text-gray-500 text-xs mb-0.5">Price</p>
+                  <p class="text-emerald-400 font-bold text-sm">₱{{ p.price }}</p>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex items-center gap-2">
+                <a [routerLink]="['/products', p.id]"
+                   class="text-xs bg-gray-800 border border-gray-700 text-gray-400 hover:border-emerald-500/40 hover:text-white px-3 py-2 rounded-lg transition">
+                  View
+                </a>
+                <button (click)="openRequest(p)"
+                        [disabled]="p.status === 'out_of_stock'"
+                        class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-lg transition font-semibold disabled:opacity-40 disabled:cursor-not-allowed">
+                  {{ p.status === 'out_of_stock' ? 'Unavailable' : '+ Request' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Low stock bar at bottom -->
+        <div *ngIf="p.status === 'low_stock'"
+             class="h-0.5 bg-yellow-500/40 mx-4 mb-3 rounded-full overflow-hidden">
+          <div class="h-full bg-yellow-500 w-1/4 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && products.length === 0"
+         class="text-center py-20 bg-gray-900 border border-gray-800 rounded-xl">
+      <p class="text-5xl mb-4">📦</p>
+      <p class="text-white font-semibold text-lg mb-2">No products found</p>
+      <p class="text-gray-500 text-sm">Try adjusting your search or filters</p>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="totalPages > 1" class="flex items-center justify-center gap-1.5 mt-6 flex-wrap">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1"
+              class="px-3 py-2 bg-gray-900 border border-gray-700 text-gray-400 rounded-lg text-xs hover:border-emerald-500 disabled:opacity-40 transition">
+        ← Prev
+      </button>
+      <ng-container *ngFor="let p of getPages()">
+        <button (click)="goToPage(p)"
+                [class]="'px-3 py-2 rounded-lg text-xs border transition ' +
+                  (currentPage === p
+                    ? 'bg-emerald-600 border-emerald-600 text-white font-bold'
+                    : 'bg-gray-900 border-gray-700 text-gray-400 hover:border-emerald-500')">
+          {{ p }}
+        </button>
+      </ng-container>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages"
+              class="px-3 py-2 bg-gray-900 border border-gray-700 text-gray-400 rounded-lg text-xs hover:border-emerald-500 disabled:opacity-40 transition">
+        Next →
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Request Modal -->
+<div *ngIf="showRequestModal"
+     class="fixed inset-0 bg-black/75 z-50 flex items-end sm:items-center justify-center px-0 sm:px-4">
+  <div class="bg-gray-900 border border-gray-700 w-full sm:max-w-md sm:rounded-xl rounded-t-2xl p-5 sm:p-6 shadow-2xl">
+
+    <div class="flex justify-between items-start mb-5">
+      <div class="flex items-center gap-3">
+        <!-- Product image in modal -->
+        <div class="w-12 h-12 rounded-lg bg-gray-800 border border-gray-700 overflow-hidden flex-shrink-0 flex items-center justify-center">
+          <img *ngIf="selectedProduct?.image_url"
+               [src]="'http://localhost:3000' + selectedProduct?.image_url"
+               class="w-full h-full object-cover">
+          <span *ngIf="!selectedProduct?.image_url" class="text-2xl">📦</span>
+        </div>
+        <div>
+          <p class="text-xs text-emerald-400 font-medium uppercase tracking-wide">Request Item</p>
+          <h3 class="text-base font-bold text-white leading-tight">{{ selectedProduct?.name }}</h3>
+        </div>
+      </div>
+      <button (click)="closeModal()"
+              class="text-gray-500 hover:text-white w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-800 transition text-xl flex-shrink-0 ml-3">
+        ✕
+      </button>
+    </div>
+
+    <div *ngIf="requestSuccess"
+         class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-lg mb-4 text-xs flex items-center gap-2">
+      ✅ {{ requestSuccess }}
+    </div>
+    <div *ngIf="requestError"
+         class="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg mb-4 text-xs flex items-start gap-2">
+      ⚠️ {{ requestError }}
+    </div>
+
+    <div class="grid grid-cols-3 gap-2 bg-gray-800 rounded-lg p-3 mb-5 text-center text-xs">
+      <div>
+        <p class="text-gray-500 mb-1">Available</p>
+        <p class="text-white font-bold">{{ selectedProduct?.quantity }}</p>
+        <p class="text-gray-500">{{ selectedProduct?.unit }}</p>
+      </div>
+      <div class="border-x border-gray-700">
+        <p class="text-gray-500 mb-1">Price</p>
+        <p class="text-emerald-400 font-bold">₱{{ selectedProduct?.price }}</p>
+      </div>
+      <div>
+        <p class="text-gray-500 mb-1">Category</p>
+        <p class="text-white font-bold leading-tight">{{ selectedProduct?.category_name || '—' }}</p>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wide">Quantity *</label>
+        <input [(ngModel)]="requestQty" type="number" min="1" [max]="selectedProduct?.quantity"
+               class="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-emerald-500 text-sm">
+        <p class="text-gray-600 text-xs mt-1">Max: {{ selectedProduct?.quantity }} {{ selectedProduct?.unit }}</p>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wide">Reason / Purpose</label>
+        <textarea [(ngModel)]="requestReason" rows="3" placeholder="Why do you need this item?"
+                  class="w-full bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-lg px-4 py-2.5 focus:outline-none focus:border-emerald-500 text-sm resize-none"></textarea>
+      </div>
+      <div class="flex gap-3">
+        <button (click)="submitRequest()" [disabled]="requesting"
+                class="flex-1 bg-emerald-600 text-white py-3 rounded-xl font-semibold hover:bg-emerald-500 transition disabled:opacity-50 text-sm">
+          {{ requesting ? 'Submitting...' : 'Submit Request' }}
+        </button>
+        <button (click)="closeModal()"
+                class="flex-1 bg-gray-800 text-gray-300 py-3 rounded-xl font-semibold hover:bg-gray-700 transition text-sm border border-gray-700">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,176 @@
+<div class="min-h-screen bg-gray-950 text-white">
+
+  <!-- Header -->
+  <div class="bg-gray-900 border-b border-gray-800 px-4 py-6 sm:py-8">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-white">My Requests</h1>
+        <p class="text-gray-400 text-xs sm:text-sm mt-1">Track your inventory request history</p>
+      </div>
+      <a routerLink="/products"
+         class="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 sm:px-5 py-2.5 rounded-lg font-semibold hover:bg-emerald-500 transition text-xs sm:text-sm w-fit">
+        + New Request
+      </a>
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-4 py-6 sm:py-8">
+
+    <!-- Filters -->
+    <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-6">
+      <div class="relative flex-1">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">🔍</span>
+        <input [(ngModel)]="search" (ngModelChange)="filter()"
+               placeholder="Search by product name..."
+               class="w-full pl-9 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-lg px-4 py-2.5 focus:outline-none focus:border-emerald-500 text-xs sm:text-sm">
+      </div>
+      <select [(ngModel)]="statusFilter" (ngModelChange)="filter()"
+              class="bg-gray-900 border border-gray-700 text-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:border-emerald-500 text-xs sm:text-sm">
+        <option value="">All Status</option>
+        <option value="pending">⏳ Pending</option>
+        <option value="approved">✅ Approved</option>
+        <option value="fulfilled">🎉 Fulfilled</option>
+        <option value="rejected">❌ Rejected</option>
+      </select>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="text-center py-16 text-gray-500">
+      <div class="text-4xl animate-spin inline-block mb-3">⏳</div>
+      <p class="text-sm">Loading requests...</p>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="!loading && paginatedItems.length === 0"
+         class="text-center py-16 sm:py-24 bg-gray-900 border border-gray-800 rounded-xl">
+      <p class="text-5xl mb-4">📋</p>
+      <p class="text-white font-semibold text-base mb-2">No requests found</p>
+      <p class="text-gray-500 text-xs sm:text-sm mb-5">
+        You haven't made any requests yet
+      </p>
+      <a routerLink="/products"
+         class="inline-block bg-emerald-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-emerald-500 transition text-sm">
+        Browse Products
+      </a>
+    </div>
+
+    <!-- Desktop Table -->
+    <div class="hidden sm:block bg-gray-900 border border-gray-800 rounded-xl overflow-hidden"
+         *ngIf="!loading && paginatedItems.length > 0">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-800 border-b border-gray-700">
+          <tr>
+            <th class="text-left py-3.5 px-5 text-xs font-semibold text-gray-400 uppercase tracking-wider">#</th>
+            <th class="text-left py-3.5 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Product</th>
+            <th class="text-left py-3.5 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Qty</th>
+            <th class="text-left py-3.5 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Reason</th>
+            <th class="text-left py-3.5 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+            <th class="text-left py-3.5 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Date</th>
+            <th class="text-left py-3.5 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-800">
+          <tr *ngFor="let r of paginatedItems; let i = index"
+              class="hover:bg-gray-800/50 transition">
+            <td class="py-4 px-5 text-gray-500 text-xs">
+              {{ (currentPage - 1) * itemsPerPage + i + 1 }}
+            </td>
+            <td class="py-4 px-4">
+              <p class="font-semibold text-white text-sm">{{ r.product_name }}</p>
+              <p class="text-gray-500 text-xs">{{ r.category_name }}</p>
+            </td>
+            <td class="py-4 px-4">
+              <span class="font-bold text-white">{{ r.quantity_requested }}</span>
+              <span class="text-gray-500 text-xs ml-1">{{ r.unit }}</span>
+            </td>
+            <td class="py-4 px-4 text-gray-400 text-xs max-w-xs">
+              <span class="line-clamp-2">{{ r.reason || '—' }}</span>
+            </td>
+            <td class="py-4 px-4">
+              <span [class]="'text-xs font-bold px-2.5 py-1 rounded-full ' + getStatusConfig(r.status).color">
+                {{ getStatusConfig(r.status).icon }} {{ getStatusConfig(r.status).label }}
+              </span>
+            </td>
+            <td class="py-4 px-4 text-gray-400 text-xs">
+              {{ r.created_at | date:'MMM d, y' }}
+            </td>
+            <td class="py-4 px-4">
+              <button *ngIf="r.status === 'pending'"
+                      (click)="cancel(r.id)"
+                      class="text-xs text-red-400 border border-red-500/30 hover:bg-red-500/10 px-3 py-1.5 rounded-lg font-medium transition">
+                Cancel
+              </button>
+              <span *ngIf="r.status !== 'pending'" class="text-gray-600 text-xs">—</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div class="sm:hidden space-y-3" *ngIf="!loading && paginatedItems.length > 0">
+      <div *ngFor="let r of paginatedItems"
+           class="bg-gray-900 border border-gray-800 rounded-xl p-4 hover:border-gray-700 transition">
+
+        <div class="flex items-start justify-between mb-3">
+          <div class="flex-1 min-w-0 pr-3">
+            <p class="font-bold text-white text-sm truncate">{{ r.product_name }}</p>
+            <p class="text-emerald-400 text-xs mt-0.5">{{ r.category_name }}</p>
+          </div>
+          <span [class]="'text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0 ' + getStatusConfig(r.status).color">
+            {{ getStatusConfig(r.status).icon }} {{ getStatusConfig(r.status).label }}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 bg-gray-800 rounded-lg p-3 mb-3 text-xs">
+          <div>
+            <p class="text-gray-500 mb-0.5">Quantity</p>
+            <p class="text-white font-bold">{{ r.quantity_requested }} {{ r.unit }}</p>
+          </div>
+          <div>
+            <p class="text-gray-500 mb-0.5">Date</p>
+            <p class="text-white">{{ r.created_at | date:'MMM d, y' }}</p>
+          </div>
+        </div>
+
+        <p *ngIf="r.reason" class="text-gray-500 text-xs mb-3 italic border-l-2 border-gray-700 pl-2">
+          {{ r.reason }}
+        </p>
+
+        <div *ngIf="r.admin_notes"
+             class="bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2 mb-3">
+          <p class="text-xs text-blue-400 font-medium mb-0.5">Admin Notes</p>
+          <p class="text-blue-300 text-xs">{{ r.admin_notes }}</p>
+        </div>
+
+        <button *ngIf="r.status === 'pending'"
+                (click)="cancel(r.id)"
+                class="w-full text-xs text-red-400 border border-red-500/30 hover:bg-red-500/10 py-2 rounded-lg font-medium transition">
+          Cancel Request
+        </button>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="totalPages > 1"
+         class="flex items-center justify-center gap-1.5 sm:gap-2 mt-6 flex-wrap">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1"
+              class="px-3 py-2 bg-gray-900 border border-gray-700 text-gray-400 rounded-lg text-xs hover:border-emerald-500 disabled:opacity-40 transition">
+        ← Prev
+      </button>
+      <ng-container *ngFor="let p of getPages()">
+        <button (click)="goToPage(p)"
+                [class]="'px-3 py-2 rounded-lg text-xs transition border ' +
+                  (currentPage === p
+                    ? 'bg-emerald-600 border-emerald-600 text-white font-bold'
+                    : 'bg-gray-900 border-gray-700 text-gray-400 hover:border-emerald-500')">
+          {{ p }}
+        </button>
+      </ng-container>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages"
+              class="px-3 py-2 bg-gray-900 border border-gray-700 text-gray-400 rounded-lg text-xs hover:border-emerald-500 disabled:opacity-40 transition">
+        Next →
+      </button>
+    </div>
+  </div>
+</div>

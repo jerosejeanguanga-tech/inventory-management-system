@@ -1,0 +1,150 @@
+<!-- HERO -->
+<section class="bg-gray-950 text-white py-12 sm:py-20 lg:py-28 px-4 border-b border-gray-800">
+  <div class="max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+
+      <!-- Left -->
+      <div>
+        <span class="inline-block bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold px-3 py-1.5 rounded-full mb-4 sm:mb-5">
+          📦 Inventory Management System
+        </span>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 sm:mb-5">
+          Control Your <br>
+          <span class="text-emerald-400">Stock & Supplies</span><br>
+          
+        </h1>
+        <p class="text-gray-400 text-sm sm:text-base lg:text-lg leading-relaxed mb-7 sm:mb-8">
+          Track products, manage requests, monitor stock levels — all in one place.
+        </p>
+
+        <!-- Not logged in buttons -->
+        <div *ngIf="!isLoggedIn" class="flex flex-col sm:flex-row gap-3">
+          <a routerLink="/register"
+             class="bg-emerald-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-emerald-500 transition text-sm text-center">
+            Get Started →
+          </a>
+          <a routerLink="/login"
+             class="bg-gray-800 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-700 transition text-sm border border-gray-700 text-center">
+            Sign In
+          </a>
+        </div>
+
+        <!-- Logged in buttons -->
+        <div *ngIf="isLoggedIn" class="flex flex-col sm:flex-row gap-3">
+          <a routerLink="/products"
+             class="bg-emerald-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-emerald-500 transition text-sm text-center">
+            Browse Products →
+          </a>
+          <a routerLink="/my-requests"
+             class="bg-gray-800 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-700 transition text-sm border border-gray-700 text-center">
+            My Requests
+          </a>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 gap-3 sm:gap-4">
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 sm:p-6 hover:border-emerald-500/30 transition">
+          <p class="text-2xl sm:text-3xl font-bold text-emerald-400 mb-1">16+</p>
+          <p class="text-gray-400 text-xs sm:text-sm">Products Available</p>
+        </div>
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 sm:p-6 hover:border-blue-500/30 transition">
+          <p class="text-2xl sm:text-3xl font-bold text-blue-400 mb-1">5</p>
+          <p class="text-gray-400 text-xs sm:text-sm">Categories</p>
+        </div>
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 sm:p-6 hover:border-purple-500/30 transition">
+          <p class="text-2xl sm:text-3xl font-bold text-purple-400 mb-1">100%</p>
+          <p class="text-gray-400 text-xs sm:text-sm">Tracked</p>
+        </div>
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 sm:p-6 hover:border-yellow-500/30 transition">
+          <p class="text-2xl sm:text-3xl font-bold text-yellow-400 mb-1">24/7</p>
+          <p class="text-gray-400 text-xs sm:text-sm">Access</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="bg-gray-950 py-10 sm:py-14 px-4 border-b border-gray-800">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-center justify-between mb-5 sm:mb-6">
+      <h2 class="text-lg sm:text-xl font-bold text-white">Browse by Category</h2>
+      <a *ngIf="isLoggedIn" routerLink="/products"
+         class="text-emerald-400 text-xs sm:text-sm hover:text-emerald-300 transition">View All →</a>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
+      <div *ngFor="let cat of categories"
+           class="bg-gray-900 border border-gray-800 rounded-xl p-3 sm:p-4 text-center hover:border-emerald-500/50 hover:bg-gray-800 transition cursor-pointer group">
+        <div class="text-2xl sm:text-3xl mb-2">📁</div>
+        <p class="text-white text-xs sm:text-sm font-semibold group-hover:text-emerald-400 transition truncate">
+          {{ cat.name }}
+        </p>
+        <p class="text-gray-500 text-xs mt-1">{{ cat.product_count }} items</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECENT PRODUCTS (logged in) -->
+<section *ngIf="isLoggedIn && products.length > 0"
+         class="bg-gray-950 py-10 sm:py-14 px-4 border-b border-gray-800">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-5 sm:mb-6">
+      <h2 class="text-lg sm:text-xl font-bold text-white">Recent Products</h2>
+      <a routerLink="/products"
+         class="text-emerald-400 hover:text-emerald-300 text-xs sm:text-sm font-medium transition">
+        View All →
+      </a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+      <div *ngFor="let product of products"
+           class="bg-gray-900 border border-gray-800 rounded-xl p-4 sm:p-5 hover:border-emerald-500/50 transition group">
+        <div class="flex justify-between items-start mb-3">
+          <div class="text-2xl sm:text-3xl">📦</div>
+          <span [class]="'text-xs font-semibold px-2 py-0.5 rounded-full ' + getStatusColor(product.status)">
+            {{ product.status.replace('_', ' ') | titlecase }}
+          </span>
+        </div>
+        <p class="text-xs text-emerald-400 font-medium mb-1">{{ product.category_name }}</p>
+        <h3 class="font-bold text-white text-sm mb-1 group-hover:text-emerald-400 transition line-clamp-1">
+          {{ product.name }}
+        </h3>
+        <p class="text-gray-500 text-xs mb-3 line-clamp-2">{{ product.description }}</p>
+        <div class="flex justify-between items-center">
+          <span class="text-emerald-400 font-bold text-sm">{{ product.quantity }} {{ product.unit }}</span>
+          <span class="text-gray-500 text-xs">₱{{ product.price }}</span>
+        </div>
+        <a [routerLink]="['/products', product.id]"
+           class="mt-3 block text-center bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 py-2 rounded-lg text-xs font-semibold hover:bg-emerald-600 hover:text-white transition">
+          View Details →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+
+
+<!-- CTA -->
+<section *ngIf="!isLoggedIn" class="bg-gradient-to-r from-emerald-900 to-emerald-950 py-10 sm:py-16 px-4 border-t border-emerald-800">
+  <div class="max-w-2xl mx-auto text-center">
+    <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-3 sm:mb-4">
+      Ready to Get Started?
+    </h2>
+    <p class="text-emerald-200 text-sm sm:text-base mb-6 sm:mb-8">
+      Create your account and start managing inventory today
+    </p>
+    <div class="flex flex-col sm:flex-row justify-center gap-3">
+      <a routerLink="/register"
+         class="bg-emerald-500 text-white font-bold px-8 py-3 rounded-lg hover:bg-emerald-400 transition text-sm sm:text-base">
+        Create Account →
+      </a>
+      <a routerLink="/login"
+         class="bg-gray-800 text-white font-bold px-8 py-3 rounded-lg hover:bg-gray-700 transition text-sm sm:text-base border border-gray-600">
+        Sign In
+      </a>
+    </div>
+  </div>
+</section>

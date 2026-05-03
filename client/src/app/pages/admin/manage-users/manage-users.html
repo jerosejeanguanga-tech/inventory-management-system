@@ -1,0 +1,206 @@
+<div class="min-h-screen bg-gray-950 text-white">
+
+  <nav class="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-14">
+
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-xl">📦</span>
+          <span class="font-bold text-white text-sm sm:text-base">InvenTrack</span>
+          <span class="hidden sm:inline text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full font-medium ml-1">Admin</span>
+        </div>
+
+        <div class="hidden md:flex items-center gap-1">
+          <a routerLink="/admin/dashboard"
+             routerLinkActive="bg-emerald-600/20 text-emerald-400 border border-emerald-500/30"
+             [routerLinkActiveOptions]="{exact: true}"
+             class="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white font-medium text-sm transition border border-transparent">
+            📊 Dashboard
+          </a>
+          <a routerLink="/admin/products"
+             routerLinkActive="bg-emerald-600/20 text-emerald-400 border border-emerald-500/30"
+             class="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white font-medium text-sm transition border border-transparent">
+            📦 Products
+          </a>
+          <a routerLink="/admin/categories"
+             routerLinkActive="bg-emerald-600/20 text-emerald-400 border border-emerald-500/30"
+             class="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white font-medium text-sm transition border border-transparent">
+            📁 Categories
+          </a>
+          <a routerLink="/admin/requests"
+             routerLinkActive="bg-emerald-600/20 text-emerald-400 border border-emerald-500/30"
+             class="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white font-medium text-sm transition border border-transparent">
+            📋 Requests
+          </a>
+          <a routerLink="/admin/users"
+             routerLinkActive="bg-emerald-600/20 text-emerald-400 border border-emerald-500/30"
+             class="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white font-medium text-sm transition border border-transparent">
+            👥 Users
+          </a>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <a routerLink="/"
+             class="hidden sm:flex items-center gap-1.5 text-xs text-gray-500 hover:text-white bg-gray-800 border border-gray-700 hover:border-gray-600 px-3 py-1.5 rounded-lg transition">
+            🏠 Site
+          </a>
+          <button (click)="mobileMenuOpen = !mobileMenuOpen"
+                  class="md:hidden flex items-center justify-center w-9 h-9 rounded-lg bg-gray-800 border border-gray-700 text-gray-400 hover:text-white transition">
+            <span *ngIf="!mobileMenuOpen">☰</span>
+            <span *ngIf="mobileMenuOpen">✕</span>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="mobileMenuOpen"
+           class="md:hidden border-t border-gray-800 py-2 space-y-1">
+        <a routerLink="/admin/dashboard" (click)="mobileMenuOpen=false"
+           routerLinkActive="bg-emerald-600/20 text-emerald-400"
+           [routerLinkActiveOptions]="{exact: true}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white text-sm transition">
+          📊 Dashboard
+        </a>
+        <a routerLink="/admin/products" (click)="mobileMenuOpen=false"
+           routerLinkActive="bg-emerald-600/20 text-emerald-400"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white text-sm transition">
+          📦 Products
+        </a>
+        <a routerLink="/admin/categories" (click)="mobileMenuOpen=false"
+           routerLinkActive="bg-emerald-600/20 text-emerald-400"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white text-sm transition">
+          📁 Categories
+        </a>
+        <a routerLink="/admin/requests" (click)="mobileMenuOpen=false"
+           routerLinkActive="bg-emerald-600/20 text-emerald-400"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white text-sm transition">
+          📋 Requests
+        </a>
+        <a routerLink="/admin/users" (click)="mobileMenuOpen=false"
+           routerLinkActive="bg-emerald-600/20 text-emerald-400"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white text-sm transition">
+          👥 Users
+        </a>
+        <a routerLink="/" (click)="mobileMenuOpen=false"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:bg-gray-800 hover:text-white text-sm transition">
+          🏠 Back to Site
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold text-white">Manage Users</h1>
+        <p class="text-gray-500 text-xs mt-0.5">{{ users.length }} registered users</p>
+      </div>
+    </div>
+
+    <div class="p-4 sm:p-6">
+      <!-- Filters -->
+      <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-5">
+        <div class="relative flex-1">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">🔍</span>
+          <input [(ngModel)]="search" (ngModelChange)="filter()" placeholder="Search by name or email..."
+                 class="w-full pl-9 bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-lg px-4 py-2.5 focus:outline-none focus:border-emerald-500 text-xs sm:text-sm">
+        </div>
+        <select [(ngModel)]="roleFilter" (ngModelChange)="filter()"
+                class="bg-gray-900 border border-gray-700 text-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:border-emerald-500 text-xs sm:text-sm">
+          <option value="">All Roles</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+      </div>
+
+      <div *ngIf="loading" class="text-center py-16 text-gray-500">
+        <div class="text-4xl animate-spin inline-block mb-3">⏳</div>
+        <p class="text-sm">Loading users...</p>
+      </div>
+
+      <!-- Desktop Table -->
+      <div class="hidden sm:block bg-gray-900 border border-gray-800 rounded-xl overflow-hidden"
+           *ngIf="!loading && paginatedItems.length > 0">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-800 border-b border-gray-700">
+            <tr>
+              <th class="text-left py-3 px-5 text-xs font-semibold text-gray-400 uppercase">#</th>
+              <th class="text-left py-3 px-4 text-xs font-semibold text-gray-400 uppercase">User</th>
+              <th class="text-left py-3 px-4 text-xs font-semibold text-gray-400 uppercase">Phone</th>
+              <th class="text-left py-3 px-4 text-xs font-semibold text-gray-400 uppercase">Location</th>
+              <th class="text-left py-3 px-4 text-xs font-semibold text-gray-400 uppercase">Role</th>
+              <th class="text-left py-3 px-4 text-xs font-semibold text-gray-400 uppercase">Joined</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-800">
+            <tr *ngFor="let u of paginatedItems; let i = index" class="hover:bg-gray-800/50 transition">
+              <td class="py-3.5 px-5 text-gray-500 text-xs">{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    {{ u.name?.charAt(0)?.toUpperCase() }}
+                  </div>
+                  <div>
+                    <p class="font-semibold text-white text-sm">{{ u.name }}</p>
+                    <p class="text-gray-500 text-xs">{{ u.email }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3.5 px-4 text-gray-400 text-xs">{{ u.phone || '—' }}</td>
+              <td class="py-3.5 px-4 text-gray-400 text-xs">{{ u.location || '—' }}</td>
+              <td class="py-3.5 px-4">
+                <span [class]="'text-xs font-bold px-2.5 py-1 rounded-full ' + getRoleBadge(u.role)">
+                  {{ u.role | titlecase }}
+                </span>
+              </td>
+              <td class="py-3.5 px-4 text-gray-400 text-xs">{{ u.created_at | date:'MMM d, y' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Cards -->
+      <div class="sm:hidden space-y-3" *ngIf="!loading && paginatedItems.length > 0">
+        <div *ngFor="let u of paginatedItems" class="bg-gray-900 border border-gray-800 rounded-xl p-4">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white font-bold flex-shrink-0">
+              {{ u.name?.charAt(0)?.toUpperCase() }}
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="font-bold text-white text-sm truncate">{{ u.name }}</p>
+              <p class="text-gray-500 text-xs truncate">{{ u.email }}</p>
+            </div>
+            <span [class]="'text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0 ' + getRoleBadge(u.role)">
+              {{ u.role | titlecase }}
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 bg-gray-800 rounded-lg p-3 text-xs">
+            <div><p class="text-gray-500 mb-0.5">Phone</p><p class="text-white">{{ u.phone || '—' }}</p></div>
+            <div><p class="text-gray-500 mb-0.5">Joined</p><p class="text-white">{{ u.created_at | date:'MMM d, y' }}</p></div>
+            <div class="col-span-2"><p class="text-gray-500 mb-0.5">Location</p><p class="text-white">{{ u.location || '—' }}</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty -->
+      <div *ngIf="!loading && paginatedItems.length === 0"
+           class="text-center py-16 bg-gray-900 border border-gray-800 rounded-xl">
+        <p class="text-4xl mb-3">👥</p>
+        <p class="text-white font-semibold">No users found</p>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="totalPages > 1" class="flex items-center justify-center gap-1.5 mt-5 flex-wrap">
+        <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1"
+                class="px-3 py-2 bg-gray-900 border border-gray-700 text-gray-400 rounded-lg text-xs hover:border-emerald-500 disabled:opacity-40 transition">← Prev</button>
+        <ng-container *ngFor="let p of getPages()">
+          <button (click)="goToPage(p)"
+                  [class]="'px-3 py-2 rounded-lg text-xs border transition ' + (currentPage === p ? 'bg-emerald-600 border-emerald-600 text-white font-bold' : 'bg-gray-900 border-gray-700 text-gray-400 hover:border-emerald-500')">
+            {{ p }}
+          </button>
+        </ng-container>
+        <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages"
+                class="px-3 py-2 bg-gray-900 border border-gray-700 text-gray-400 rounded-lg text-xs hover:border-emerald-500 disabled:opacity-40 transition">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
