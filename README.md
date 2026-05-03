@@ -8,8 +8,8 @@
 
 | Service | URL |
 |---|---|
-| 🖥️ Frontend (Angular) | https://inventorytracksystem.netlify.app|
-| ⚙️ Backend API (Node.js) | https://inventory-management-system-a1um.onrender.com |
+| Frontend | https://inventorytracksystem.netlify.app |
+| ⚙️ Backend API | https://inventory-management-system-a1um.onrender.com |
 
 
 ## 🛠️ Tech Stack
@@ -188,21 +188,27 @@ If the file is empty, run the backend setup again and verify the Swagger documen
 
 ## 📸 Screenshots
 
-### UI Screenshots
-| Page | Preview |
-|---|---|
-| Home Page | ![Home](screenshots/home.png) |
-| Login Page | ![Login](screenshots/login.png) |
-| Register Page | ![Register](screenshots/register.png) |
-| Products Page | ![Products](screenshots/products.png) |
-| Product Detail | ![Product Detail](screenshots/product-detail.png) |
-| My Requests | ![My Requests](screenshots/my-requests.png) |
-| Profile | ![Profile](screenshots/profile.png) |
-| Admin Dashboard | ![Dashboard](screenshots/admin-dashboard.png) |
-| Manage Products | ![Manage Products](screenshots/admin-products.png) |
-| Manage Categories | ![Manage Categories](screenshots/admin-categories.png) |
-| Manage Requests | ![Manage Requests](screenshots/admin-requests.png) |
-| Manage Users | ![Manage Users](screenshots/admin-users.png) |
+
+
+### User Pages
+| Page | Preview | Description |
+| Home Page | ![Home](screenshots/home.png) | Landing page showing featured products and navigation |
+| Login Page | ![Login](screenshots/login.png) | User authentication with quick-fill admin/user buttons |
+| Register Page | ![Register](screenshots/register.png) | New user registration with phone validation |
+| Products Page | ![Products](screenshots/products.png) | Browse all inventory items with search and filter |
+| Product Detail | ![Product Detail](screenshots/product-detail.png) | Full product info with stock level and request button |
+| My Requests | ![My Requests](screenshots/my-requests.png) | Track all submitted inventory requests and their status |
+| Profile | ![Profile](screenshots/profile.png) | View and update personal info and profile photo |
+
+### Admin Pages
+
+| Page | Preview | Description |
+|---|---|---|
+| Admin Dashboard | ![Dashboard](screenshots/admin-dashboard.png) | Overview of stats, recent requests, and stock alerts |
+| Manage Products | ![Manage Products](screenshots/admin-products.png) | Add, edit, delete products and update stock levels |
+| Manage Categories | ![Manage Categories](screenshots/admin-categories.png) | Create and manage product categories |
+| Manage Requests | ![Manage Requests](screenshots/admin-requests.png) | Review and process all user inventory requests |
+| Manage Users | ![Manage Users](screenshots/admin-users.png) | View all registered users and their roles |
 
 ### API Testing (Postman)
 | Endpoint | Preview |
