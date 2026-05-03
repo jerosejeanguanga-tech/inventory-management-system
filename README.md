@@ -8,7 +8,7 @@
 
 | Service | URL |
 |---|---|
-| 🖥️ Frontend (Angular) | `[YOUR FRONTEND URL HERE]` |
+| 🖥️ Frontend (Angular) | https://inventorytracksystem.netlify.app|
 | ⚙️ Backend API (Node.js) | `[YOUR BACKEND API URL HERE]` |
 | 📚 API Documentation | `[YOUR BACKEND URL]/api-docs` |
 
@@ -45,7 +45,11 @@
 |---|---|
 | MySQL | Relational database |
 
-### 4. Frontend Setup
+
+
+## SETUP INTRUCTIONS
+
+ Frontend Setup
 
 ```bash
 cd client
@@ -53,7 +57,7 @@ npm install
 ng serve
 ```
 
-### 3. Backend Setup
+ Backend Setup
 
 ```bash
 cd server
@@ -148,50 +152,6 @@ npm run dev
 - [x] Responsive design on all screen sizes
 
 
-## 📡 API Overview
-
-### Auth
-| Method | Endpoint | Description | Access |
-|---|---|---|---|
-| POST | `/api/auth/register` | Register new user | Public |
-| POST | `/api/auth/login` | Login and get JWT token | Public |
-
-### Users
-| Method | Endpoint | Description | Access |
-|---|---|---|---|
-| GET | `/api/users/profile` | Get current user profile | User |
-| PUT | `/api/users/profile` | Update profile + photo | User |
-| GET | `/api/users` | Get all users | Admin |
-| GET | `/api/users/dashboard` | Get dashboard stats | Admin |
-
-### Categories
-| Method | Endpoint | Description | Access |
-|---|---|---|---|
-| GET | `/api/categories` | Get all categories | Public |
-| POST | `/api/categories` | Create category | Admin |
-| PUT | `/api/categories/:id` | Update category | Admin |
-| DELETE | `/api/categories/:id` | Delete category | Admin |
-
-### Products
-| Method | Endpoint | Description | Access |
-|---|---|---|---|
-| GET | `/api/products` | Get all products (search, filter, paginate) | User |
-| GET | `/api/products/:id` | Get product by ID | User |
-| POST | `/api/products` | Create product + image upload | Admin |
-| PUT | `/api/products/:id` | Update product + image | Admin |
-| DELETE | `/api/products/:id` | Delete product | Admin |
-| PATCH | `/api/products/:id/stock` | Update stock level | Admin |
-
-### Requests
-| Method | Endpoint | Description | Access |
-|---|---|---|---|
-| POST | `/api/requests` | Submit inventory request | User |
-| GET | `/api/requests/my` | Get my requests | User |
-| GET | `/api/requests` | Get all requests | Admin |
-| PATCH | `/api/requests/:id/status` | Approve / reject / fulfill | Admin |
-| DELETE | `/api/requests/:id` | Delete request | User/Admin |
-
----
 
 
 ## 📸 Screenshots
