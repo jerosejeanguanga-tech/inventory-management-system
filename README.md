@@ -69,7 +69,40 @@ Run the backend:
 npm run dev
 ```
 
-## 📡 API Overview
+## � Troubleshooting
+
+### If It Shows an Error — Fix Swagger Setup
+
+Check your `server/src/index.ts` — make sure swagger is set up like this:
+
+```typescript
+import express from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+import path from 'path';
+
+const app = express();
+
+// Swagger
+const swaggerDocument = YAML.load(path.join(__dirname, '../swagger.yaml'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+```
+
+### If swagger.yaml is Empty — Add Basic Content
+
+Open `server/swagger.yaml` and ensure it contains the complete OpenAPI specification with all endpoints properly documented. The file should include:
+- API metadata (title, version, servers)
+- Security schemes (Bearer Token / JWT)
+- All endpoint definitions organized by tags (Auth, Products, Categories, Requests, Users)
+- Request/response schemas for each endpoint
+
+If the file is empty, run the backend setup again and verify the Swagger documentation loads at: `http://localhost:3000/api-docs`
+
+---
+
+## �📡 API Overview
 
 ### Auth
 | Method | Endpoint | Description | Access |

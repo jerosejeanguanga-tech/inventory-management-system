@@ -1,1 +1,342 @@
-"" 
+openapi: 3.0.0
+info:
+  title: InvenTrack API
+  description: Inventory Management System REST API
+  version: 1.0.0
+servers:
+  - url: https://inventory-management-system-a1um.onrender.com
+    description: Production Server
+  - url: http://localhost:3000
+    description: Local Development
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /api/auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  example: john@gmail.com
+                password:
+                  type: string
+                  example: password123
+                phone:
+                  type: string
+                  example: "09123456789"
+                location:
+                  type: string
+                  example: Cebu City
+      responses:
+        "201":
+          description: User registered successfully
+        "400":
+          description: Email already exists
+
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: Login and get JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: jerosejeanguanga@gmail.com
+                password:
+                  type: string
+                  example: Jerose#12345
+      responses:
+        "200":
+          description: Login successful returns token
+        "401":
+          description: Invalid credentials
+
+  /api/products:
+    get:
+      tags: [Products]
+      summary: Get all products
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: category_id
+          schema:
+            type: integer
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [available, low_stock, out_of_stock]
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of products
+    post:
+      tags: [Products]
+      summary: Create new product (Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                category_id:
+                  type: integer
+                quantity:
+                  type: integer
+                unit:
+                  type: string
+                price:
+                  type: number
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: Product created
+
+  /api/products/{id}:
+    get:
+      tags: [Products]
+      summary: Get product by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Product details
+    put:
+      tags: [Products]
+      summary: Update product (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Product updated
+    delete:
+      tags: [Products]
+      summary: Delete product (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Product deleted
+
+  /api/categories:
+    get:
+      tags: [Categories]
+      summary: Get all categories
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of categories
+    post:
+      tags: [Categories]
+      summary: Create category (Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Office Supplies
+                description:
+                  type: string
+      responses:
+        "201":
+          description: Category created
+
+  /api/categories/{id}:
+    put:
+      tags: [Categories]
+      summary: Update category (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Category updated
+    delete:
+      tags: [Categories]
+      summary: Delete category (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Category deleted
+
+  /api/requests:
+    get:
+      tags: [Requests]
+      summary: Get all requests (Admin only)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of all requests
+    post:
+      tags: [Requests]
+      summary: Submit inventory request
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                quantity_requested:
+                  type: integer
+                reason:
+                  type: string
+      responses:
+        "201":
+          description: Request submitted
+
+  /api/requests/my:
+    get:
+      tags: [Requests]
+      summary: Get my requests
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of user requests
+
+  /api/requests/{id}/status:
+    patch:
+      tags: [Requests]
+      summary: Update request status (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [pending, approved, fulfilled, rejected]
+                admin_notes:
+                  type: string
+      responses:
+        "200":
+          description: Status updated
+
+  /api/users:
+    get:
+      tags: [Users]
+      summary: Get all users (Admin only)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of users
+
+  /api/users/profile:
+    get:
+      tags: [Users]
+      summary: Get current user profile
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User profile
+    put:
+      tags: [Users]
+      summary: Update profile
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Profile updated
+
+  /api/users/dashboard:
+    get:
+      tags: [Users]
+      summary: Get admin dashboard stats
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Dashboard statistics
