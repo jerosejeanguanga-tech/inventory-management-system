@@ -18,8 +18,16 @@ import pool from './config/db';
 
 const app = express();
 
-// Middleware
-app.use(cors({ origin: '*', methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'] }));
+// CORS — allow Netlify frontend
+app.use(cors({
+  origin: [
+    'https://inventorytracksystem.netlify.app',
+    'http://localhost:4200'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
