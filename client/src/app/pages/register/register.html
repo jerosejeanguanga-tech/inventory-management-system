@@ -88,21 +88,74 @@
 
         <!-- Password -->
         <div>
-          <label class="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wide">
-            Password *
+          <label class="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5">
+            Password
           </label>
           <div class="relative">
             <input [type]="showPassword ? 'text' : 'password'"
                    formControlName="password"
-                   placeholder="Min. 6 characters"
-                   class="w-full bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-lg px-3 sm:px-4 py-2.5 pr-12 focus:outline-none focus:border-emerald-500 transition text-sm">
+                   placeholder="••••••••"
+                   class="w-full bg-gray-800 border text-white placeholder-gray-500 rounded-lg px-4 py-2.5 sm:py-3 pr-12 focus:outline-none transition text-sm"
+                   [class.border-gray-700]="!form.get('password')?.touched || form.get('password')?.valid"
+                   [class.border-red-500]="form.get('password')?.touched && form.get('password')?.invalid"
+                   [class.border-emerald-500]="form.get('password')?.touched && form.get('password')?.valid">
             <button type="button" (click)="showPassword = !showPassword"
-                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition">
-              {{ showPassword ? '' : '' }}
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition text-base">
+              {{ showPassword ? '🙈' : '👁️' }}
             </button>
           </div>
-          <p *ngIf="f['password'].touched && f['password'].invalid"
-             class="text-red-400 text-xs mt-1">Min. 6 characters</p>
+
+          <!-- Password Strength Requirements -->
+          <div *ngIf="form.get('password')?.value" class="mt-2 space-y-1.5">
+
+            <!-- Strength Bar -->
+            <div class="flex gap-1 mb-2">
+              <div class="h-1.5 flex-1 rounded-full transition-all"
+                   [class]="getStrengthColor(0)"></div>
+              <div class="h-1.5 flex-1 rounded-full transition-all"
+                   [class]="getStrengthColor(1)"></div>
+              <div class="h-1.5 flex-1 rounded-full transition-all"
+                   [class]="getStrengthColor(2)"></div>
+              <div class="h-1.5 flex-1 rounded-full transition-all"
+                   [class]="getStrengthColor(3)"></div>
+              <div class="h-1.5 flex-1 rounded-full transition-all"
+                   [class]="getStrengthColor(4)"></div>
+            </div>
+
+            <!-- Strength Label -->
+            <p class="text-xs font-semibold" [class]="getStrengthLabelColor()">
+              {{ getStrengthLabel() }}
+            </p>
+
+            <!-- Requirements Checklist -->
+            <div class="grid grid-cols-1 gap-1 mt-2">
+              <div class="flex items-center gap-2 text-xs"
+                   [class]="!form.get('password')?.errors?.['minLength'] ? 'text-emerald-400' : 'text-gray-500'">
+                <span>{{ !form.get('password')?.errors?.['minLength'] ? '✅' : '⬜' }}</span>
+                At least 8 characters
+              </div>
+              <div class="flex items-center gap-2 text-xs"
+                   [class]="!form.get('password')?.errors?.['noUppercase'] ? 'text-emerald-400' : 'text-gray-500'">
+                <span>{{ !form.get('password')?.errors?.['noUppercase'] ? '✅' : '⬜' }}</span>
+                One uppercase letter (A-Z)
+              </div>
+              <div class="flex items-center gap-2 text-xs"
+                   [class]="!form.get('password')?.errors?.['noLowercase'] ? 'text-emerald-400' : 'text-gray-500'">
+                <span>{{ !form.get('password')?.errors?.['noLowercase'] ? '✅' : '⬜' }}</span>
+                One lowercase letter (a-z)
+              </div>
+              <div class="flex items-center gap-2 text-xs"
+                   [class]="!form.get('password')?.errors?.['noNumber'] ? 'text-emerald-400' : 'text-gray-500'">
+                <span>{{ !form.get('password')?.errors?.['noNumber'] ? '✅' : '⬜' }}</span>
+                One number (0-9)
+              </div>
+              <div class="flex items-center gap-2 text-xs"
+                   [class]="!form.get('password')?.errors?.['noSymbol'] ? 'text-emerald-400' : 'text-gray-500'">
+                <span>{{ !form.get('password')?.errors?.['noSymbol'] ? '✅' : '⬜' }}</span>
+                One symbol (!@#$%^&*)
+              </div>
+            </div>
+          </div>
         </div>
 
         <button type="submit" [disabled]="loading"
