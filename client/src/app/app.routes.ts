@@ -1,17 +1,20 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
+import { adminRedirectGuard } from './guards/admin-redirect.guard';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./pages/home/home').then(m => m.HomeComponent)
+      import('./pages/home/home').then(m => m.HomeComponent),
+    canActivate: [adminRedirectGuard]
   },
   {
     path: 'login',
     loadComponent: () =>
-      import('./pages/login/login').then(m => m.LoginComponent)
+      import('./pages/login/login').then(m => m.LoginComponent),
+    canActivate: [adminRedirectGuard]
   },
   {
     path: 'register',
