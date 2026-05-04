@@ -110,8 +110,24 @@
               <label class="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wide">
                 Phone Number
               </label>
-              <input formControlName="phone" type="tel" placeholder="09XX-XXX-XXXX"
-                     class="w-full bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-lg px-4 py-2.5 focus:outline-none focus:border-emerald-500 transition text-sm">
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">🇵🇭</span>
+                <input formControlName="phone"
+                       type="tel"
+                       placeholder="09123456789"
+                       maxlength="11"
+                       [class]="'w-full pl-9 bg-gray-800 border text-white placeholder-gray-500 rounded-lg px-4 py-2.5 focus:outline-none transition text-sm ' +
+                         (form.get('phone')?.touched && form.get('phone')?.invalid
+                           ? 'border-red-500 focus:border-red-500'
+                           : 'border-gray-700 focus:border-emerald-500')">
+              </div>
+              <p *ngIf="phoneError" class="text-red-400 text-xs mt-1.5 flex items-center gap-1">
+                ⚠️ {{ phoneError }}
+              </p>
+              <p *ngIf="form.get('phone')?.touched && form.get('phone')?.valid"
+                 class="text-emerald-400 text-xs mt-1.5 flex items-center gap-1">
+                ✅ Valid phone number
+              </p>
             </div>
           </div>
 

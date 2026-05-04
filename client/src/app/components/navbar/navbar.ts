@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -16,13 +17,15 @@ export class NavbarComponent implements OnInit {
   currentUser: any = null;
   userMenuOpen = false;
   mobileMenuOpen = false;
+  apiUrl = 'https://inventory-management-system-a1um.onrender.com';
 
   constructor(private auth: AuthService, private router: Router) {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.userMenuOpen = false;
-        this.mobileMenuOpen = false;
-      }
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.userMenuOpen = false;
+      this.mobileMenuOpen = false;
+      this.currentUser = this.auth.getCurrentUser();
     });
   }
 
@@ -50,6 +53,10 @@ export class NavbarComponent implements OnInit {
 
   toggleMobileMenu(): void {
     this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  onImgError(event: any): void {
+    event.target.style.display = 'none';
   }
 
   logout(): void {

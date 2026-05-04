@@ -7,8 +7,15 @@
       <div class="relative" *ngIf="currentUser">
         <button (click)="toggleUserMenu($event)"
                 class="flex items-center gap-2.5 bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-emerald-500/40 px-3 py-2 rounded-xl transition group">
-          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-            {{ currentUser?.name?.charAt(0)?.toUpperCase() }}
+          <div class="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden border-2 border-emerald-500/30">
+            <img *ngIf="currentUser?.profile_image"
+                 [src]="apiUrl + currentUser?.profile_image"
+                 class="w-full h-full object-cover"
+                 (error)="onImgError($event)">
+            <div *ngIf="!currentUser?.profile_image"
+                 class="w-full h-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm">
+              {{ currentUser?.name?.charAt(0)?.toUpperCase() }}
+            </div>
           </div>
           <div class="hidden sm:block text-left">
             <p class="text-white text-xs font-semibold leading-tight">{{ currentUser?.name }}</p>
@@ -23,8 +30,14 @@
 
           <div class="px-4 py-3 bg-gray-800 border-b border-gray-700">
             <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                {{ currentUser?.name?.charAt(0)?.toUpperCase() }}
+              <div class="w-10 h-10 rounded-full flex-shrink-0 overflow-hidden border-2 border-emerald-500/30">
+                <img *ngIf="currentUser?.profile_image"
+                     [src]="apiUrl + currentUser?.profile_image"
+                     class="w-full h-full object-cover">
+                <div *ngIf="!currentUser?.profile_image"
+                     class="w-full h-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm">
+                  {{ currentUser?.name?.charAt(0)?.toUpperCase() }}
+                </div>
               </div>
               <div class="min-w-0">
                 <p class="text-white text-sm font-semibold truncate">{{ currentUser?.name }}</p>

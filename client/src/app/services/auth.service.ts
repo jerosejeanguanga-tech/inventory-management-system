@@ -37,6 +37,15 @@ export class AuthService {
   isAdmin(): boolean { return this.getStoredUser()?.role === 'admin'; }
   getCurrentUser(): any { return this.getStoredUser(); }
 
+  updateUserPhoto(photoUrl: string): void {
+    const user = this.getCurrentUser();
+    if (user) {
+      user.profile_image = photoUrl;
+      localStorage.setItem('user', JSON.stringify(user));
+      this.userSubject.next(user);
+    }
+  }
+
   private getStoredUser(): any {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;

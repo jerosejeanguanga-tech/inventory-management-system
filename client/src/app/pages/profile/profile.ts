@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -24,11 +25,15 @@ export class ProfileComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private auth: AuthService
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
-      phone: [''],
+      phone: ['', [
+        Validators.required,
+        Validators.pattern(/^(\+63|0)[0-9]{10}$/)
+      ]],
       location: [''],
     });
   }
@@ -83,6 +88,7 @@ export class ProfileComponent implements OnInit {
         this.success = 'Profile updated successfully!';
         if (res.profile_image) {
           this.profile = { ...this.profile, profile_image: res.profile_image };
+          this.auth.updateUserPhoto(res.profile_image);
         }
         this.selectedFile = null;
         this.previewUrl = null;
@@ -95,6 +101,15 @@ export class ProfileComponent implements OnInit {
         this.cdr.markForCheck();
       }
     });
+  }
+
+  get phoneError(): string {
+    const ctrl = this.form.get('phone');
+    if (ctrl?.touched && ctrl?.errors) {
+      if (ctrl.errors['required']) return 'Phone number is required';
+      if (ctrl.errors['pattern']) return 'Enter a valid PH number (e.g. 09123456789)';
+    }
+    return '';
   }
 
   getRoleBadge(): string {
