@@ -1,0 +1,7 @@
+<!-- Show navbar on ALL pages EXCEPT admin -->
+<app-navbar *ngIf="!isAdminRoute()"></app-navbar>
+
+<router-outlet></router-outlet>
+
+<!-- Show footer on ALL pages EXCEPT admin -->
+<app-footer *ngIf="!isAdminRoute()"></app-footer>
